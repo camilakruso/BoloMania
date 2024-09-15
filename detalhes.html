@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <header>
+        <h1 id="produto-titulo">Detalhes do Produto</h1>
+    </header>
+
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="sobre.html">Sobre Nós</a>
+        <a href="contato.html">Contato</a>
+        <a href="carrinho.html">Carrinho</a>
+    </nav>
+
+
+    <section id="detalhes-container">
+        <div class="produto-detalhes">
+            <img id="produto-imagem" src="" alt="Imagem do Produto">
+            <div>
+                <h3>Ingredientes</h3>
+                <p id="produto-ingredientes"></p>
+
+                <h3>Informação Nutricional</h3>
+                <ul id="produto-nutricao"></ul>
+
+                <button class="add-carrinho-btn">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Bolo Mania © 2024 - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+
+        const produtos = {
+            "chocolate_ninho": {
+                "titulo": "Chocolate com Ninho",
+                "imagem": "./Imagens/chocolate_ninho.png",
+                "ingredientes": "Cacau, leite em pó, leite condensado, creme de leite, entre outros.",
+                "nutricao": [
+                    "Calorias: 350 kcal por porção",
+                    "Proteínas: 6g",
+                    "Carboidratos: 45g",
+                    "Gorduras: 18g"
+                ]
+            },
+            "red_velvet": {
+                "titulo": "Red Velvet",
+                "imagem": "./Imagens/red_velvet.png",
+                "ingredientes": "Farinha de trigo, açúcar, corante, cream cheese, entre outros.",
+                "nutricao": [
+                    "Calorias: 400 kcal por porção",
+                    "Proteínas: 5g",
+                    "Carboidratos: 50g",
+                    "Gorduras: 20g"
+                ]
+            },
+            "casadinho": {
+                "titulo": "Casadinho",
+                "imagem": "./Imagens/casadinho.png",
+                "ingredientes": "Bolo de chocolate, creme de leite, brigadeiro, entre outros.",
+                "nutricao": [
+                    "Calorias: 380 kcal por porção",
+                    "Proteínas: 4g",
+                    "Carboidratos: 52g",
+                    "Gorduras: 18g"
+                ]
+            },
+            "sensacao_com_whey": {
+                "titulo": "Sensação com Whey",
+                "imagem": "./Imagens/sensacao_com_whey.png",
+                "ingredientes": "Morango, Whey Protein, chocolate, entre outros.",
+                "nutricao": [
+                    "Calorias: 320 kcal por porção",
+                    "Proteínas: 10g",
+                    "Carboidratos: 40g",
+                    "Gorduras: 12g"
+                ]
+            },
+            "cenoura_com_chocolate": {
+                "titulo": "Cenoura com Chocolate S/Açúcar",
+                "imagem": "./Imagens/cenoura_com_chocolate.png",
+                "ingredientes": "Bolo de cenoura, chocolate diet, entre outros.",
+                "nutricao": [
+                    "Calorias: 290 kcal por porção",
+                    "Proteínas: 5g",
+                    "Carboidratos: 35g",
+                    "Gorduras: 12g"
+                ]
+            },
+            "nozes": {
+                "titulo": "Bolo de Nozes",
+                "imagem": "./Imagens/nozes.png",
+                "ingredientes": "Nozes, farinha de trigo, doce de leite, entre outros.",
+                "nutricao": [
+                    "Calorias: 420 kcal por porção",
+                    "Proteínas: 7g",
+                    "Carboidratos: 45g",
+                    "Gorduras: 22g"
+                ]
+            },
+            "baba_de_moca": {
+                "titulo": "Baba de Moça",
+                "imagem": "./Imagens/baba_de_moca.png",
+                "ingredientes": "Coco, leite condensado, ovos, açúcar, entre outros.",
+                "nutricao": [
+                    "Calorias: 360 kcal por porção",
+                    "Proteínas: 5g",
+                    "Carboidratos: 50g",
+                    "Gorduras: 15g"
+                ]
+            },
+            "chocolate_belga": {
+                "titulo": "Chocolate Belga",
+                "imagem": "./Imagens/chocolate_belga.png",
+                "ingredientes": "Chocolate belga, creme de leite, cacau, entre outros.",
+                "nutricao": [
+                    "Calorias: 450 kcal por porção",
+                    "Proteínas: 6g",
+                    "Carboidratos: 55g",
+                    "Gorduras: 20g"
+                ]
+            },
+            "salada_frutas": {
+                "titulo": "Salada de Frutas com Iogurte",
+                "imagem": "./Imagens/salada_frutas.png",
+                "ingredientes": "Iogurte, frutas variadas (morango, manga, kiwi, etc.), mel.",
+                "nutricao": [
+                    "Calorias: 220 kcal por porção",
+                    "Proteínas: 8g",
+                    "Carboidratos: 40g",
+                    "Gorduras: 3g"
+                ]
+            }
+        };
+
+
+        function getQueryParameter(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+
+        const produtoID = getQueryParameter('produto');
+        const produto = produtos[produtoID];
+
+        if (produto) {
+            document.getElementById("produto-titulo").textContent = produto.titulo;
+            document.getElementById("produto-imagem").src = produto.imagem;
+            document.getElementById("produto-ingredientes").textContent = produto.ingredientes;
+
+            const nutricaoList = document.getElementById("produto-nutricao");
+            produto.nutricao.forEach(info => {
+                const li = document.createElement("li");
+                li.textContent = info;
+                nutricaoList.appendChild(li);
+            });
+        } else {
+            document.getElementById("detalhes-container").innerHTML = "<p>Produto não encontrado.</p>";
+        }
+    </script>
+
+</body>
+</html>

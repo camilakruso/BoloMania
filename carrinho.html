@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho - Bolo Mania</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>Bolo Mania</h1>
+        </div>
+        <input class="search-bar" type="text" placeholder="Busque o produto por nome ou sabor" id="searchInput">
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="sobre.html">Sobre Nós</a>
+        <a href="contato.html">Contato</a>
+        <a href="carrinho.html">Carrinho</a> 
+    </nav>
+
+    <section id="carrinho">
+        <h2>Seu Carrinho</h2>
+        <div id="carrinhoContainer"></div>
+        <div id="totalContainer">
+            <p>Total: <span id="totalValor">R$ 0,00</span></p>
+        </div>
+        <div>
+            <button onclick="limparCarrinho()" class="btn-clear">Limpar Carrinho</button>
+        </div>
+        <div>
+            <button onclick="finalizarCompra()" class="btn-finalizar">Finalizar Compra</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>Bolo Mania © 2024 - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+
+        const precos = {
+            "Chocolate com Ninho": 15.00,
+            "Red Velvet": 18.00,
+            "Casadinho": 12.00,
+            "Sensação com Whey": 20.00,
+            "Cenoura com Chocolate S/Açúcar": 13.00,
+            "Bolo de Nozes": 22.00,
+            "Baba de Moça": 16.00,
+            "Chocolate Belga": 25.00,
+            "Salada de Frutas com Iogurte": 10.00
+        };
+
+
+        function carregarCarrinho() {
+            const carrinhoContainer = document.getElementById("carrinhoContainer");
+            const totalValor = document.getElementById("totalValor");
+            let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+            carrinhoContainer.innerHTML = "";
+            let total = 0;
+
+            if (carrinho.length === 0) {
+                carrinhoContainer.innerHTML = "<p>Seu carrinho está vazio.</p>";
+                totalValor.textContent = "R$ 0,00"; 
+            } else {
+                carrinho.forEach((item, index) => {
+                    const preco = precos[item.nome];
+                    total += preco;
+
+                    const itemHTML = `
+                        <div class="carrinho-item">
+                            <img src="${item.imagem}" alt="${item.nome}" class="carrinho-img">
+                            <div class="carrinho-info">
+                                <p>${item.nome}</p>
+                                <p>R$ ${preco.toFixed(2)}</p>
+                            </div>
+                            <button class="btn-remove" onclick="removerDoCarrinho(${index})">x</button>
+                        </div>
+                    `;
+                    carrinhoContainer.innerHTML += itemHTML;
+                });
+                totalValor.textContent = `R$ ${total.toFixed(2)}`;
+            }
+        }
+
+
+        function removerDoCarrinho(index) {
+            let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+            carrinho.splice(index, 1); 
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
+            carregarCarrinho(); 
+        }
+
+
+        function limparCarrinho() {
+            localStorage.removeItem('carrinho');
+            carregarCarrinho(); 
+        }
+
+
+        function finalizarCompra() {
+            let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+            if (carrinho.length > 0) {
+                const total = document.getElementById("totalValor").textContent;
+                localStorage.setItem('totalCompra', total); 
+                window.location.href = "pagamento.html"; 
+            } else {
+                alert('Seu carrinho está vazio!');
+            }
+        }
+
+
+        window.onload = carregarCarrinho;
+    </script>
+
+</body>
+</html>
